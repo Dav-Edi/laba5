@@ -1,0 +1,74 @@
+<style>
+    .contact-form {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 30px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      font-family: 'Arial', sans-serif;
+    }
+    .contact-form input, .contact-form textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    .contact-form textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .contact-form button {
+      background: #007bff;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    .contact-form button:hover {
+      background: #0056b3;
+    }
+    .contact-form input:focus, .contact-form textarea:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0,123,255,0.5);
+    }
+  </style>
+  
+  <form id="contact" class="contact-form">
+    <input name="name" placeholder="Ваше имя" required>
+    <input name="email" placeholder="Email" required>
+    <textarea name="message" placeholder="Сообщение" required></textarea>
+    <button type="submit">Отправить</button>
+  </form>
+  
+  <script>
+  document.getElementById('contact').addEventListener('submit', async (e) => {
+    e.preventDefault();
+  
+    const data = Object.fromEntries(new FormData(e.target).entries());
+    const text =
+      📩 Новое сообщение:\n +
+      Имя: ${data.name}\n +
+      Email: ${data.email}\n +
+      Сообщение: ${data.message};
+  
+    await fetch(https://api.telegram.org/bot8440947721:AAFhbzmrWIliMfCxA6stGJOkFom6hclasEQ/sendMessage, {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: "1897598560",
+        text
+      })
+    });
+  
+    alert("Сообщение отправлено!");
+  });
+  </script>
