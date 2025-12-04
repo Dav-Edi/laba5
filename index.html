@@ -432,29 +432,86 @@
             });
         });
 
+        // Telegram Bot Configuration
+        const TELEGRAM_BOT_TOKEN = '8440947721:AAFhbzmrWIliMfCxA6stGJOkFom6hclasEQ';
+        const TELEGRAM_CHAT_ID = null; // Укажите ваш chat_id здесь или получите его через getUpdates
+
+        // Функция для получения chat_id (вызовите один раз, чтобы узнать ваш chat_id)
+        async function getChatId() {
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates`);
+                const data = await response.json();
+                if (data.ok && data.result.length > 0) {
+                    const chatId = data.result[data.result.length - 1].message.chat.id;
+                    console.log('Ваш chat_id:', chatId);
+                    alert(`Ваш chat_id: ${chatId}\nСкопируйте его и вставьте в код.`);
+                    return chatId;
+                } else {
+                    console.log('Отправьте боту любое сообщение, затем обновите страницу и попробуйте снова.');
+                    alert('Отправьте боту любое сообщение, затем обновите страницу и попробуйте снова.');
+                }
+            } catch (error) {
+                console.error('Ошибка при получении chat_id:', error);
+                alert('Ошибка при получении chat_id. Проверьте токен бота.');
+            }
+        }
+
         // Form submission
         document.getElementById('contact-form').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const data = Object.fromEntries(new FormData(e.target).entries());
-            const text =
-                `📩 Новое сообщение:\n` +
-                `Имя: ${data.name}\n` +
-                `Email: ${data.email}\n` +
-                `Сообщение: ${data.message}`;
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Отправка...';
+            submitButton.disabled = true;
 
-            // Здесь можно добавить отправку на сервер
-            // await fetch(`https://api.telegram.org/botYOUR_BOT_TOKEN/sendMessage`, {
-            //     method: 'POST',
-            //     headers: { "Content-Type": "application/json" },
-            //     body: JSON.stringify({
-            //         chat_id: "YOUR_CHAT_ID",
-            //         text
-            //     })
-            // });
+            try {
+                const data = Object.fromEntries(new FormData(e.target).entries());
+                const text =
+                    `📩 Новое сообщение с сайта Аниме Мир:\n\n` +
+                    `👤 Имя: ${data.name}\n` +
+                    `📧 Email: ${data.email}\n` +
+                    `💬 Сообщение:\n${data.message}`;
 
-            alert("Сообщение отправлено! Спасибо за обратную связь! 🎉");
-            e.target.reset();
+                // Если chat_id не указан, пытаемся получить его
+                let chatId = TELEGRAM_CHAT_ID;
+                if (!chatId) {
+                    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getUpdates`);
+                    const updates = await response.json();
+                    if (updates.ok && updates.result.length > 0) {
+                        chatId = updates.result[updates.result.length - 1].message.chat.id;
+                        console.log('Автоматически получен chat_id:', chatId);
+                    } else {
+                        throw new Error('Не удалось получить chat_id. Отправьте боту сообщение и попробуйте снова.');
+                    }
+                }
+
+                // Отправка сообщения в Telegram
+                const telegramResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: text,
+                        parse_mode: 'HTML'
+                    })
+                });
+
+                const telegramData = await telegramResponse.json();
+
+                if (telegramData.ok) {
+                    alert("✅ Сообщение успешно отправлено в Telegram! Спасибо за обратную связь! 🎉");
+                    e.target.reset();
+                } else {
+                    throw new Error(telegramData.description || 'Ошибка при отправке сообщения');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert(`❌ Ошибка при отправке сообщения: ${error.message}\n\nПроверьте:\n1. Токен бота правильный\n2. Вы отправили боту хотя бы одно сообщение\n3. Интернет соединение работает`);
+            } finally {
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
         });
 
         // Card click animation
