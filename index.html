@@ -1,74 +1,494 @@
-<style>
-    .contact-form {
-      max-width: 400px;
-      margin: 40px auto;
-      padding: 30px;
-      background: #f8f9fa;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      font-family: 'Arial', sans-serif;
-    }
-    .contact-form input, .contact-form textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-    .contact-form textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
-    .contact-form button {
-      background: #007bff;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      width: 100%;
-      transition: background 0.3s;
-    }
-    .contact-form button:hover {
-      background: #0056b3;
-    }
-    .contact-form input:focus, .contact-form textarea:focus {
-      outline: none;
-      border-color: #007bff;
-      box-shadow: 0 0 5px rgba(0,123,255,0.5);
-    }
-  </style>
-  
-  <form id="contact" class="contact-form">
-    <input name="name" placeholder="Ваше имя" required>
-    <input name="email" placeholder="Email" required>
-    <textarea name="message" placeholder="Сообщение" required></textarea>
-    <button type="submit">Отправить</button>
-  </form>
-  
-  <script>
-  document.getElementById('contact').addEventListener('submit', async (e) => {
-    e.preventDefault();
-  
-    const data = Object.fromEntries(new FormData(e.target).entries());
-    const text =
-      📩 Новое сообщение:\n +
-      Имя: ${data.name}\n +
-      Email: ${data.email}\n +
-      Сообщение: ${data.message};
-  
-    await fetch(https://api.telegram.org/bot8440947721:AAFhbzmrWIliMfCxA6stGJOkFom6hclasEQ/sendMessage, {
-      method: 'POST',
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: "1897598560",
-        text
-      })
-    });
-  
-    alert("Сообщение отправлено!");
-  });
-  </script>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аниме Мир - Погрузитесь в мир аниме</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 1.4s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Sections */
+        section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: white;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Anime Cards */
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .anime-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .anime-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .anime-card-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .anime-card-content {
+            padding: 1.5rem;
+        }
+
+        .anime-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .anime-card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .anime-card-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* Features Section */
+        .features {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature {
+            text-align: center;
+            color: white;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            transition: transform 0.3s;
+        }
+
+        .feature:hover {
+            transform: scale(1.05);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 5rem;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .anime-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">🎌 Аниме Мир</div>
+            <ul class="nav-links">
+                <li><a href="#home">Главная</a></li>
+                <li><a href="#anime">Аниме</a></li>
+                <li><a href="#features">Особенности</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <h1>Добро пожаловать в мир аниме! 🎨</h1>
+        <p>Откройте для себя удивительные истории, захватывающие приключения и незабываемых персонажей</p>
+        <a href="#anime" class="cta-button">Исследовать</a>
+    </section>
+
+    <section id="anime">
+        <div class="container">
+            <h2 class="section-title">Популярные аниме</h2>
+            <div class="anime-grid">
+                <div class="anime-card">
+                    <div class="anime-card-image">⚔️</div>
+                    <div class="anime-card-content">
+                        <h3>Атака титанов</h3>
+                        <p>Эпическая история о выживании человечества в мире, где титаны угрожают их существованию. Напряженный сюжет и глубокие персонажи.</p>
+                        <div class="anime-card-tags">
+                            <span class="tag">Экшен</span>
+                            <span class="tag">Драма</span>
+                            <span class="tag">Фантастика</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="anime-card">
+                    <div class="anime-card-image">👻</div>
+                    <div class="anime-card-content">
+                        <h3>Демон-убийца</h3>
+                        <p>История Танджиро Камадо, который становится охотником на демонов, чтобы спасти свою сестру. Красивая анимация и эмоциональный сюжет.</p>
+                        <div class="anime-card-tags">
+                            <span class="tag">Экшен</span>
+                            <span class="tag">Сверхъестественное</span>
+                            <span class="tag">Историческое</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="anime-card">
+                    <div class="anime-card-image">🎭</div>
+                    <div class="anime-card-content">
+                        <h3>Джоджо</h3>
+                        <p>Безумные приключения семьи Джостаров на протяжении поколений. Уникальный стиль, запоминающиеся персонажи и невероятные бои.</p>
+                        <div class="anime-card-tags">
+                            <span class="tag">Экшен</span>
+                            <span class="tag">Комедия</span>
+                            <span class="tag">Приключения</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="anime-card">
+                    <div class="anime-card-image">🌊</div>
+                    <div class="anime-card-content">
+                        <h3>Ван Пис</h3>
+                        <p>Приключения Манки Д. Луффи и его команды пиратов в поисках легендарного сокровища. Долгая, но захватывающая история.</p>
+                        <div class="anime-card-tags">
+                            <span class="tag">Приключения</span>
+                            <span class="tag">Комедия</span>
+                            <span class="tag">Экшен</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="anime-card">
+                    <div class="anime-card-image">🎮</div>
+                    <div class="anime-card-content">
+                        <h3>Наруто</h3>
+                        <p>История юного ниндзя Наруто Узумаки, который мечтает стать Хокаге. История о дружбе, упорстве и достижении мечты.</p>
+                        <div class="anime-card-tags">
+                            <span class="tag">Экшен</span>
+                            <span class="tag">Приключения</span>
+                            <span class="tag">Драма</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="anime-card">
+                    <div class="anime-card-image">🔮</div>
+                    <div class="anime-card-content">
+                        <h3>Магическая битва</h3>
+                        <p>Современное аниме о студентах, изучающих проклятия и магию. Темная атмосфера, сложные персонажи и потрясающая анимация.</p>
+                        <div class="anime-card-tags">
+                            <span class="tag">Экшен</span>
+                            <span class="tag">Сверхъестественное</span>
+                            <span class="tag">Триллер</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Почему мы любим аниме?</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Уникальный стиль</h3>
+                    <p>Каждое аниме имеет свой неповторимый визуальный стиль и эстетику</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📖</div>
+                    <h3>Глубокие сюжеты</h3>
+                    <p>Сложные истории, которые затрагивают важные темы и заставляют задуматься</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💝</div>
+                    <h3>Эмоциональность</h3>
+                    <p>Аниме умеет вызывать сильные эмоции - от смеха до слез</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Разнообразие</h3>
+                    <p>Жанры на любой вкус: от романтики до научной фантастики</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title">Свяжитесь с нами</h2>
+            <form id="contact-form" style="max-width: 600px; margin: 0 auto; background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);">
+                <input type="text" name="name" placeholder="Ваше имя" required style="width: 100%; padding: 1rem; margin-bottom: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem; transition: border-color 0.3s;">
+                <input type="email" name="email" placeholder="Email" required style="width: 100%; padding: 1rem; margin-bottom: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem; transition: border-color 0.3s;">
+                <textarea name="message" placeholder="Сообщение" required rows="5" style="width: 100%; padding: 1rem; margin-bottom: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 1rem; resize: vertical; transition: border-color 0.3s;"></textarea>
+                <button type="submit" style="width: 100%; padding: 1rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: transform 0.3s;">Отправить</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Аниме Мир. Все права защищены. Создано с ❤️ для любителей аниме</p>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form input focus effects
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.borderColor = '#667eea';
+            });
+            input.addEventListener('blur', function() {
+                this.style.borderColor = '#e0e0e0';
+            });
+        });
+
+        // Telegram Bot Configuration
+        const TELEGRAM_BOT_TOKEN = '8440947721:AAFhbzmrWIliMfCxA6stGJOkFom6hclasEQ';
+        const TELEGRAM_CHAT_ID = '1897598560'; // Ваш chat_id для получения сообщений
+
+        // Form submission
+        document.getElementById('contact-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Отправка...';
+            submitButton.disabled = true;
+
+            try {
+                const data = Object.fromEntries(new FormData(e.target).entries());
+                const text =
+                    `📩 Новое сообщение с сайта Аниме Мир:\n\n` +
+                    `👤 Имя: ${data.name}\n` +
+                    `📧 Email: ${data.email}\n` +
+                    `💬 Сообщение:\n${data.message}`;
+
+                // Отправка сообщения в Telegram
+                const telegramResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CHAT_ID,
+                        text: text
+                    })
+                });
+
+                const telegramData = await telegramResponse.json();
+
+                if (telegramData.ok) {
+                    alert("✅ Сообщение успешно отправлено в Telegram! Спасибо за обратную связь! 🎉");
+                    e.target.reset();
+                } else {
+                    throw new Error(telegramData.description || 'Ошибка при отправке сообщения');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                alert(`❌ Ошибка при отправке сообщения: ${error.message}\n\nПроверьте:\n1. Токен бота правильный\n2. Chat ID указан верно\n3. Интернет соединение работает`);
+            } finally {
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
+        });
+
+        // Card click animation
+        document.querySelectorAll('.anime-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
